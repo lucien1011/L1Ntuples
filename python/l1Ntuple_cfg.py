@@ -17,6 +17,9 @@ process.load('Configuration/StandardSequences/MagneticField_AutoFromDBCurrent_cf
 process.load("JetMETCorrections.Configuration.DefaultJEC_cff")
 ## process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+process.load('RecoMET.METProducers.hcalnoiseinfoproducer_cfi')
+process.load("CommonTools.RecoAlgos.HBHENoiseFilter_cfi")
+process.load("CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi")
 
 # output file
 process.TFileService = cms.Service("TFileService",
@@ -41,8 +44,22 @@ process.load("L1TriggerDPG.L1Ntuples.l1MenuTreeProducer_cfi")
 process.load("L1TriggerDPG.L1Ntuples.l1MuonRecoTreeProducer_cfi")
 process.load("EventFilter.L1GlobalTriggerRawToDigi.l1GtTriggerMenuLite_cfi")
 
+# Noise Filter
+process.hcalnoise.fillCaloTowers = cms.bool(False)
+process.hcalnoise.fillTracks = cms.bool(False)
+process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+			inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+			reverseDecision = cms.bool(False)
+			)
+
+process.hcalnoise.recHitCollName = cms.string("hbheprereco")
+
 process.p = cms.Path(
     process.RawToDigi
+    +process.hcalLocalRecoSequence
+    +process.hcalnoise
+    +process.HBHENoiseFilterResultProducer
+    +process.ApplyBaselineHBHENoiseFilter
     +process.l1NtupleProducer
     +process.l1extraParticles
     +process.l1ExtraTreeProducer
