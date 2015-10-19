@@ -51,6 +51,10 @@ process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
 			inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
 			reverseDecision = cms.bool(False)
 			)
+process.ApplyHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
+		    inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHEIsoNoiseFilterResult'),
+		        reverseDecision = cms.bool(False)
+			)
 
 process.hcalnoise.recHitCollName = cms.string("hbheprereco")
 
@@ -60,6 +64,7 @@ process.p = cms.Path(
     +process.hcalnoise
     +process.HBHENoiseFilterResultProducer
     +process.ApplyBaselineHBHENoiseFilter
+    +process.ApplyHBHEIsoNoiseFilter
     +process.l1NtupleProducer
     +process.l1extraParticles
     +process.l1ExtraTreeProducer
