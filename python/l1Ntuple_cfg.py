@@ -18,7 +18,6 @@ process.load("JetMETCorrections.Configuration.DefaultJEC_cff")
 ## process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('RecoMET.METProducers.hcalnoiseinfoproducer_cfi')
-process.load("CommonTools.RecoAlgos.HBHENoiseFilter_cfi")
 process.load("CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi")
 
 # output file
@@ -57,6 +56,11 @@ process.ApplyHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
 			)
 
 process.hcalnoise.recHitCollName = cms.string("hbheprereco")
+
+process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion = cms.bool(False) 
+process.HBHENoiseFilterResultProducer.defaultDecision = cms.string("HBHENoiseFilterResultRun2Loose")
+
+process.HBHENoiseFilterResultProducer.minZeros = cms.int32(9999)
 
 process.p = cms.Path(
     process.RawToDigi
